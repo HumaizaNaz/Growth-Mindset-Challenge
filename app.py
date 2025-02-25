@@ -3,6 +3,7 @@
 import streamlit as st
 import random
 import datetime
+import matplotlib  # noqa: F401
 import matplotlib.pyplot as plt
 import pandas as pd  # noqa: F401
 from PIL import Image  # noqa: F401

@@ -1,12 +1,12 @@
 
+
 import streamlit as st
 import random
 import datetime
 import matplotlib.pyplot as plt
-import pandas as pd
-import numpy as np
-from PIL import Image
-import time
+import pandas as pd  # noqa: F401
+from PIL import Image  # noqa: F401
+import time  # noqa: F401
 
 # Page Configuration
 st.set_page_config(page_title="Growth Mindset Challenge", page_icon="🌟", layout="wide")

@@ -1,5 +1,3 @@
-
-
 import streamlit as st
 import random
 import datetime
@@ -31,6 +29,9 @@ if "mood_history" not in st.session_state:
     st.session_state.mood_history = []
 if "theme" not in st.session_state:
     st.session_state.theme = "light"
+# Add selected_mood to session state
+if "selected_mood" not in st.session_state:
+    st.session_state.selected_mood = None
 
 # Motivational Quotes
 quotes = [
@@ -218,21 +219,24 @@ def main():
             mood_options = ["terrible", "bad", "neutral", "good", "excellent"]
             mood_emojis = ["😫", "😔", "😐", "😊", "😁"]
             
-            selected_mood = None
             for i, (mood, emoji) in enumerate(zip(mood_options, mood_emojis)):
                 with cols[i]:
-                    if st.button(f"{emoji} {mood.capitalize()}"):
-                        selected_mood = mood
+                    if st.button(f"{emoji} {mood.capitalize()}", key=f"mood_{mood}"):
+                        st.session_state.selected_mood = mood
             
-            if selected_mood:
-                st.info(f"You selected: {selected_mood.capitalize()}")
+            # Display selected mood
+            if st.session_state.selected_mood:
+                st.info(f"You selected: {st.session_state.selected_mood.capitalize()}")
             
+            # Submit Reflection
             if st.button("📩 Submit Reflection"):
-                if reflection and selected_challenge and selected_mood:
-                    add_reflection(selected_challenge, reflection, selected_mood)
-                    st.success("Awesome! Keep reflecting and growing every day!")
+                if reflection and selected_challenge and st.session_state.selected_mood:
+                    add_reflection(selected_challenge, reflection, st.session_state.selected_mood)
+                    st.success("Reflection submitted successfully!")
+                    # Clear mood selection after submission
+                    st.session_state.selected_mood = None
                 else:
-                    st.warning("Please complete all fields before submitting.")
+                    st.error("Please select a challenge, write a reflection, and choose your mood.")
     
     # Progress Tracker page
     elif page == "Progress Tracker":
@@ -331,9 +335,12 @@ def main():
             
             with video_col2:
                 st.write("**Growth Mindset vs. Fixed Mindset**")
+                st.write("Learn the difference" )
+                st.write("**Growth Mindset vs. Fixed Mindset**")
                 st.write("Learn the difference between growth and fixed mindsets.")
                 st.write("[Watch on YouTube](https://www.youtube.com/watch?v=KUWn_TJTrnU)")
         
+    
         with resource_tabs[1]:
             st.write("### Recommended Books")
             book_col1, book_col2 = st.columns(2)
@@ -350,7 +357,6 @@ def main():
         
         with resource_tabs[2]:
             st.write("### Helpful Articles")
-            st.write("- [Developing a Growth Mindset with Carol Dweck](https://  Helpful Articles")
             st.write("- [Developing a Growth Mindset with Carol Dweck](https://www.mindsetworks.com/science/)")
             st.write("- [The Learning Myth: Why I'll Never Tell My Son He's Smart](https://www.khanacademy.org/college-careers-more/talks-and-interviews/talks-and-interviews-unit/conversations-with-sal/a/the-learning-myth-why-ill-never-tell-my-son-hes-smart)")
             st.write("- [How to Develop a Growth Mindset](https://hbr.org/2016/01/what-having-a-growth-mindset-actually-means)")
